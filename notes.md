@@ -3,3 +3,4 @@
 - npm run dev
 - npm install @mui/material @emotion/react @emotion/styled
 - cd ..
+- npm run build
