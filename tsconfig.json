@@ -12,15 +12,19 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "baseUrl": ".",  // baseUrl should be inside compilerOptions
+    "paths": {
+      "@/*": ["./src/*"],   // Path alias, e.g. @/components/NavBar
+      "src/*": ["./src/*"]  // Absolute import, e.g. src/components/NavBar
+    },
     "plugins": [
       {
         "name": "next"
       }
-    ],
-    "paths": {
-      "@/*": ["./src/*"]
-    }
+    ]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }
+
+
