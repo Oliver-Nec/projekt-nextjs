@@ -1,0 +1,5 @@
+- npx create-next-app@latest
+- 2x yes 1x no 2x yes 1x no
+- npm run dev
+- npm install @mui/material @emotion/react @emotion/styled
+- cd ..
