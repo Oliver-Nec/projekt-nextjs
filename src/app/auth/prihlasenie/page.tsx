@@ -1,14 +1,23 @@
 // src/app/auth/prihlasenie/page.tsx
 
-import Typography from '@mui/material/Typography';
+"use client"; // Add this line
 
-export const metadata = { title: "Prihlasenie | ZoskaSnap" };
+import { signIn } from 'next-auth/react';
+import { Button, Typography, Container } from '@mui/material';
 
-export default function SignIn() {
-
+const SignIn = () => {
   return (
-
-      <Typography> Prihlasenie </Typography>
-
+    <Container>
+      <Typography variant="h4">Sign In</Typography>
+      <Button 
+        variant="contained" 
+        onClick={() => signIn('google')}
+        sx={{ marginTop: '16px' }}
+      >
+        Sign in with Google
+      </Button>
+    </Container>
   );
-}
+};
+
+export default SignIn;

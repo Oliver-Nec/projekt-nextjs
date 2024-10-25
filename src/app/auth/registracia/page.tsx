@@ -1,14 +1,51 @@
 // src/app/auth/registracia/page.tsx
 
-import Typography from '@mui/material/Typography';
+"use client"; // Add this line
 
-export const metadata = { title: "Registracia | ZoskaSnap" };
+import { useState } from 'react';
+import { Button, TextField, Typography, Container } from '@mui/material';
 
-export default function SignUp() {
+const Register = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Handle registration logic here
+  };
 
   return (
-
-      <Typography> Registracia </Typography>
-
+    <Container>
+      <Typography variant="h4">Register</Typography>
+      <form onSubmit={handleSubmit}>
+        <TextField
+          label="Email"
+          type="email"
+          fullWidth
+          margin="normal"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <TextField
+          label="Password"
+          type="password"
+          fullWidth
+          margin="normal"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <Button 
+          variant="contained" 
+          type="submit"
+          sx={{ marginTop: '16px' }}
+        >
+          Register
+        </Button>
+      </form>
+    </Container>
   );
-}
+};
+
+export default Register;
