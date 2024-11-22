@@ -1,12 +1,12 @@
 "use client";
 
-import * as React from 'react';
+import React from 'react';
 import { BottomNavigation, BottomNavigationAction, Avatar } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
-import { useRouter } from 'next/navigation'; // Use App Router hook
-import { useSession, signOut } from 'next-auth/react'; // Import useSession and signOut
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 const NavBar = () => {
   const [value, setValue] = React.useState(0);
@@ -27,18 +27,61 @@ const NavBar = () => {
         break;
       case 3:
         if (!session) {
-          router.push('/auth/prihlasenie'); // Sign In
+          router.push('/auth/prihlasenie'); // Direct to Sign In page
         } else {
-          signOut(); // Sign Out if signed in
+          router.push('/auth/odhlasenie'); // Direct to Sign Out page
         }
         break;
       case 4:
-        router.push('/auth/registracia'); // Sign Up
+        router.push('/auth/registracia'); // Direct to Sign Up page
         break;
       default:
         break;
     }
   };
+
+  const navigationActions = [
+    <BottomNavigationAction key="home" label="Domov" icon={<HomeIcon />} />,
+    <BottomNavigationAction key="posts" label="Prispevky" icon={<AddCircleIcon />} />,
+  ];
+
+  if (session) {
+    navigationActions.push(
+      <BottomNavigationAction
+        key="profile"
+        label="Profil"
+        icon={
+          <Avatar
+            alt="User Profile Picture"
+            src={session.user?.image || ''}
+            sx={{ width: 24, height: 24 }}
+          />
+        }
+        onClick={() => router.push('/profil')}
+      />,
+      <BottomNavigationAction
+        key="logout"
+        label="Odhlásiť"
+        icon={<HowToRegIcon />}
+        onClick={() => router.push('/auth/odhlasenie')} // Direct to Sign Out page
+      />
+    );
+  } else {
+    navigationActions.push(
+      <BottomNavigationAction
+        key="signin"
+        label="Prihlásenie"
+        icon={<HowToRegIcon />}
+        onClick={() => router.push('/auth/prihlasenie')} // Direct to Sign In page
+      />,
+      <BottomNavigationAction
+        key="signup"
+        label="Registrácia"
+        icon={<HowToRegIcon />}
+        onClick={() => router.push('/auth/registracia')} // Direct to Sign Up page
+      />
+    );
+  }
 
   return (
     <BottomNavigation
@@ -47,30 +90,7 @@ const NavBar = () => {
       showLabels
       sx={{ position: 'fixed', bottom: 0, width: '100%' }}
     >
-      <BottomNavigationAction label="Domov" icon={<HomeIcon />} />
-      <BottomNavigationAction label="Prispevky" icon={<AddCircleIcon />} />
-      {!session ? (
-        [
-          <BottomNavigationAction key="registracia" label="Registrácia" icon={<HowToRegIcon />} />,
-          <BottomNavigationAction key="prihlasenie" label="Prihlásenie" icon={<HowToRegIcon />} />,
-        ]
-      ) : (
-        [
-          <BottomNavigationAction
-            key="profil"
-            label="Profil"
-            icon={
-              <Avatar
-                alt="User Profile Picture"
-                src={session.user?.image || ''}
-                sx={{ width: 24, height: 24 }}
-              />
-            }
-            onClick={() => router.push('/profil')}
-          />,
-          <BottomNavigationAction key="odhlasit" label="Odhlásiť" icon={<HowToRegIcon />} />,
-        ]
-      )}
+      {navigationActions}
     </BottomNavigation>
   );
 };
