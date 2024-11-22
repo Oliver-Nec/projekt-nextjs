@@ -1,45 +1,40 @@
-// src/components/NavBar.tsx
-"use client";  // Mark the component as a Client Component
+"use client";
 
 import * as React from 'react';
-import { BottomNavigation, BottomNavigationAction } from '@mui/material';
+import { BottomNavigation, BottomNavigationAction, Avatar } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
-import SearchIcon from '@mui/icons-material/Search';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
-import { useRouter } from 'next/navigation'; // Use next/navigation for App Router
+import { useRouter } from 'next/navigation'; // Use App Router hook
 import { useSession, signOut } from 'next-auth/react'; // Import useSession and signOut
 
 const NavBar = () => {
   const [value, setValue] = React.useState(0);
-  const router = useRouter(); // Use the new App Router hook
-  const { data: session } = useSession(); // Get the session data
+  const router = useRouter();
+  const { data: session } = useSession();
 
-  // Handle navigation
   const handleNavigation = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
-    // Use the router to navigate between pages
     switch (newValue) {
       case 0:
         router.push('/'); // Home
         break;
       case 1:
-        router.push('/profil'); // Profile
+        router.push('/prispevok'); // Posts
         break;
       case 2:
-        router.push('/prispevok'); // Posts
+        router.push('/profil'); // Profile
         break;
       case 3:
         if (!session) {
           router.push('/auth/prihlasenie'); // Sign In
         } else {
-          signOut(); // Sign Out if already signed in
+          signOut(); // Sign Out if signed in
         }
         break;
       case 4:
         router.push('/auth/registracia'); // Sign Up
-        break;  
+        break;
       default:
         break;
     }
@@ -53,38 +48,27 @@ const NavBar = () => {
       sx={{ position: 'fixed', bottom: 0, width: '100%' }}
     >
       <BottomNavigationAction label="Domov" icon={<HomeIcon />} />
-      <BottomNavigationAction label="Profily" icon={<SearchIcon />} />
       <BottomNavigationAction label="Prispevky" icon={<AddCircleIcon />} />
-      
-      {session ? (
+      {!session ? (
         [
-          <BottomNavigationAction 
-            key="profil" 
-            label="Profil" 
-            icon={<AccountCircleIcon />} 
-            onClick={() => router.push('/profil')} 
-          />,
-          <BottomNavigationAction 
-            key="odhlasit" 
-            label="Odhlásiť" 
-            icon={<HowToRegIcon />} 
-            onClick={signOut} 
-          />
+          <BottomNavigationAction key="registracia" label="Registrácia" icon={<HowToRegIcon />} />,
+          <BottomNavigationAction key="prihlasenie" label="Prihlásenie" icon={<HowToRegIcon />} />,
         ]
       ) : (
         [
-          <BottomNavigationAction 
-            key="prihlasenie" 
-            label="Prihlasenie" 
-            icon={<AccountCircleIcon />} 
-            onClick={() => router.push('/auth/prihlasenie')} 
+          <BottomNavigationAction
+            key="profil"
+            label="Profil"
+            icon={
+              <Avatar
+                alt="User Profile Picture"
+                src={session.user?.image || ''}
+                sx={{ width: 24, height: 24 }}
+              />
+            }
+            onClick={() => router.push('/profil')}
           />,
-          <BottomNavigationAction 
-            key="registracia" 
-            label="Registracia" 
-            icon={<HowToRegIcon />} 
-            onClick={() => router.push('/auth/registracia')} 
-          />
+          <BottomNavigationAction key="odhlasit" label="Odhlásiť" icon={<HowToRegIcon />} />,
         ]
       )}
     </BottomNavigation>
