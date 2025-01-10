@@ -12,7 +12,7 @@ const SignIn = () => {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        height: "100vh",
+        height: "30vh",
         padding: 2,
       }}
     >
